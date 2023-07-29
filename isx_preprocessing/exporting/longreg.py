@@ -2,6 +2,7 @@ import isx
 from typing import Sequence, Optional, Union
 from pathlib import Path
 import tempfile
+import random
 
 
 class IsxLongtitudinalRegistration:
@@ -17,8 +18,9 @@ class IsxLongtitudinalRegistration:
 
     def _gen_temp_cellsets(self, cellset_files: Sequence[Path]) -> Sequence[Path]:
         tmp_dir = Path(tempfile.gettempdir())
+  
         output_cellsets = [
-            tmp_dir / (str(i) + Path(f).name) for i, f in enumerate(cellset_files)
+            tmp_dir / (str(i) + str(random.randint(0, 100000)) + Path(f).name) for i, f in enumerate(cellset_files)
         ]
         return output_cellsets
 

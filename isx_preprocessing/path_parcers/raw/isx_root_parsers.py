@@ -1,5 +1,5 @@
 from pathlib import Path
-from .isx_mouse_dir import IsxMouseDir, AstrocyteSet1IsxMouseDir, AstrocyteSet2IsxMouseDir
+from .isx_mouse_dir import IsxMouseDir, AstrocyteSet1IsxMouseDir, AstrocyteSet2IsxMouseDir, OFLRepeatedIsxMouseDir, OFLFirstIsxMouseDir
 from typing import List, Optional, Iterable, Sequence
 from dataclasses import dataclass
 
@@ -106,6 +106,46 @@ class IsxRootParserAstrocyteSet2(IsxRootParser):
                     continue
             try:
                 mouse_dirs.append(AstrocyteSet2IsxMouseDir.from_mouse_dir(d))
+            except ValueError:
+                print(d.name)
+                raise
+        return cls(root_dir=root_dir, mouse_dirs=mouse_dirs)
+
+
+
+
+@dataclass
+class IsxRootParserOFLRepeated(IsxRootParser):
+    mouse_dirs: Sequence[OFLRepeatedIsxMouseDir]
+
+    @classmethod
+    def from_root_dir(cls, root_dir: Path,):
+        mouse_dirs: List[OFLRepeatedIsxMouseDir] = []
+        for d in root_dir.glob("*"):
+            if not d.is_dir():
+                continue
+            if not d.name.startswith("lens"):
+                continue
+            try:
+                mouse_dirs.append(OFLRepeatedIsxMouseDir.from_mouse_dir(d))
+            except ValueError:
+                print(d.name)
+                raise
+        return cls(root_dir=root_dir, mouse_dirs=mouse_dirs)
+
+
+@dataclass
+class IsxRootParserOFLFirst(IsxRootParser):
+    mouse_dirs: Sequence[OFLFirstIsxMouseDir]
+
+    @classmethod
+    def from_root_dir(cls, root_dir: Path,):
+        mouse_dirs: List[OFLFirstIsxMouseDir] = []
+        for d in root_dir.glob("*"):
+            if not d.is_dir():
+                continue
+            try:
+                mouse_dirs.append(OFLFirstIsxMouseDir.from_mouse_dir(d))
             except ValueError:
                 print(d.name)
                 raise

@@ -1,5 +1,5 @@
 from pathlib import Path
-from .output_mouse_dir import OutputMouseDir, OutputMouseDirAstrocyte
+from .output_mouse_dir import OutputMouseDir, OutputMouseDirAstrocyte, OutputMouseDirOFLRepeated, OutputMouseDirOFLFirst
 from typing import List, Optional, Iterable, Sequence
 from dataclasses import dataclass
 
@@ -56,6 +56,43 @@ class OutputRootParserAstrocyte(OutputRootParser):
                     continue
             try:
                 mouse_dirs.append(OutputMouseDirAstrocyte.from_mouse_dir(d))
+            except ValueError:
+                raise
+        return cls(root_dir=root_dir, mouse_dirs=mouse_dirs)
+    
+
+@dataclass
+class OutputRootParserOFLRepeated(OutputRootParser):
+    mouse_dirs: Sequence[OutputMouseDirOFLRepeated]
+
+    @classmethod
+    def from_root_dir(cls, root_dir: Path):
+        mouse_dirs: List[OutputMouseDirOFLRepeated] = []
+        for d in root_dir.glob("*"):
+            if not d.is_dir():
+                continue
+            if not d.name.startswith("l"):
+                continue
+
+            try:
+                mouse_dirs.append(OutputMouseDirOFLRepeated.from_mouse_dir(d))
+            except ValueError:
+                raise
+        return cls(root_dir=root_dir, mouse_dirs=mouse_dirs)
+
+@dataclass
+class OutputRootParserOFLFirst(OutputRootParser):
+    mouse_dirs: Sequence[OutputMouseDirOFLFirst]
+
+    @classmethod
+    def from_root_dir(cls, root_dir: Path):
+        mouse_dirs: List[OutputMouseDirOFLFirst] = []
+        for d in root_dir.glob("*"):
+            if not d.is_dir():
+                continue
+
+            try:
+                mouse_dirs.append(OutputMouseDirOFLFirst.from_mouse_dir(d))
             except ValueError:
                 raise
         return cls(root_dir=root_dir, mouse_dirs=mouse_dirs)

@@ -2,6 +2,7 @@ from pathlib import Path
 from .output_session_dir import OutputDir
 from dataclasses import dataclass
 import datetime
+from typing import List
 
 
 @dataclass
@@ -126,4 +127,102 @@ class OutputMouseDirAstrocyte(OutputMouseDir):
             ext_ret_dir=ext_ret_dir,
             long_ret_dir=long_ret_dir,
             renew_dir=renew_dir,
+        )
+
+
+
+@dataclass
+class OutputMouseDirOFLRepeated(OutputMouseDir):
+    mouse_name: str
+    mouse_dir: Path
+
+    day0_dir: OutputDir
+    day1_dir: OutputDir
+    day2_dir: OutputDir
+    day3_dir: OutputDir
+    day4_dir: OutputDir
+
+    @property
+    def day_dirs(self) -> List[OutputDir]:
+        return [self.day0_dir, self.day1_dir, self.day2_dir, self.day3_dir, self.day4_dir]
+
+    @classmethod
+    def from_mouse_dir(cls, mouse_dir: Path):
+        # filter sub_dirs to only include those that end in six digits
+
+        day0_dir = OutputDir.from_session_dir(mouse_dir / "day0")
+        day1_dir = OutputDir.from_session_dir(mouse_dir / "day1")
+        day2_dir = OutputDir.from_session_dir(mouse_dir / "day2")
+        day3_dir = OutputDir.from_session_dir(mouse_dir / "day3")
+        day4_dir = OutputDir.from_session_dir(mouse_dir / "day4")
+
+        long_reg_csv = mouse_dir / "long_reg.csv"
+        long_reg_tidy_csv = mouse_dir / "long_reg_tidy.csv"
+        long_reg_tidy_dataset_id_csv = mouse_dir / "long_reg_tidy_dataset_id.csv"
+        long_reg_crop_csv = mouse_dir / "long_reg_crop.csv"
+        long_reg_translation_csv = mouse_dir / "long_reg_translation.csv"
+
+
+        return cls(
+            mouse_name=mouse_dir.name,
+            mouse_dir=mouse_dir,
+            day0_dir=day0_dir,
+            day1_dir=day1_dir,
+            day2_dir=day2_dir,
+            day3_dir=day3_dir,
+            day4_dir=day4_dir,
+            long_reg_csv=long_reg_csv,
+            long_reg_tidy_csv=long_reg_tidy_csv,
+            long_reg_tidy_dataset_id_csv=long_reg_tidy_dataset_id_csv,
+            long_reg_crop_csv=long_reg_crop_csv,
+            long_reg_translation_csv=long_reg_translation_csv,
+        )
+    
+
+
+@dataclass
+class OutputMouseDirOFLFirst(OutputMouseDir):
+    mouse_name: str
+    mouse_dir: Path
+
+    day0_dir: OutputDir
+    day1_dir: OutputDir
+    day2_dir: OutputDir
+    day3_dir: OutputDir
+    day4_dir: OutputDir
+
+    @property
+    def day_dirs(self) -> List[OutputDir]:
+        return [self.day0_dir, self.day1_dir, self.day2_dir, self.day3_dir, self.day4_dir]
+
+    @classmethod
+    def from_mouse_dir(cls, mouse_dir: Path):
+        # filter sub_dirs to only include those that end in six digits
+
+        day0_dir = OutputDir.from_session_dir(mouse_dir / "day0")
+        day1_dir = OutputDir.from_session_dir(mouse_dir / "day1")
+        day2_dir = OutputDir.from_session_dir(mouse_dir / "day2")
+        day3_dir = OutputDir.from_session_dir(mouse_dir / "day3")
+        day4_dir = OutputDir.from_session_dir(mouse_dir / "day4")
+
+        long_reg_csv = mouse_dir / "long_reg.csv"
+        long_reg_tidy_csv = mouse_dir / "long_reg_tidy.csv"
+        long_reg_tidy_dataset_id_csv = mouse_dir / "long_reg_tidy_dataset_id.csv"
+        long_reg_crop_csv = mouse_dir / "long_reg_crop.csv"
+        long_reg_translation_csv = mouse_dir / "long_reg_translation.csv"
+
+
+        return cls(
+            mouse_name=mouse_dir.name,
+            mouse_dir=mouse_dir,
+            day0_dir=day0_dir,
+            day1_dir=day1_dir,
+            day2_dir=day2_dir,
+            day3_dir=day3_dir,
+            day4_dir=day4_dir,
+            long_reg_csv=long_reg_csv,
+            long_reg_tidy_csv=long_reg_tidy_csv,
+            long_reg_tidy_dataset_id_csv=long_reg_tidy_dataset_id_csv,
+            long_reg_crop_csv=long_reg_crop_csv,
+            long_reg_translation_csv=long_reg_translation_csv,
         )

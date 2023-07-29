@@ -175,3 +175,75 @@ class AstrocyteSet2IsxMouseDir(IsxMouseDir):
             long_ret_dir=long_ret_dir,
             renew_dir=renew_dir,
         )
+
+
+
+
+@dataclass
+class OFLRepeatedIsxMouseDir(IsxMouseDir):
+    mouse_name: str
+    mouse_dir: Path
+
+    day0_dir: ISXDir
+    day1_dir: ISXDir
+    day2_dir: ISXDir
+    day3_dir: ISXDir
+    day4_dir: ISXDir
+
+    @property
+    def day_dirs(self) -> List[ISXDir]:
+        return [self.day0_dir, self.day1_dir, self.day2_dir, self.day3_dir, self.day4_dir]
+
+    @classmethod
+    def from_mouse_dir(cls, mouse_dir: Path):
+        day0_dir = ISXDir.from_session_dir(mouse_dir / "day0")
+        day1_dir = ISXDir.from_session_dir(mouse_dir / "day1")
+        day2_dir = ISXDir.from_session_dir(mouse_dir / "day2")
+        day3_dir = ISXDir.from_session_dir(mouse_dir / "day3")
+        day4_dir = ISXDir.from_session_dir(mouse_dir / "day4")
+
+
+        return cls(
+            mouse_name=mouse_dir.name,
+            mouse_dir=mouse_dir,
+            day0_dir=day0_dir,
+            day1_dir=day1_dir,
+            day2_dir=day2_dir,
+            day3_dir=day3_dir,
+            day4_dir=day4_dir,
+        )
+    
+
+@dataclass
+class OFLFirstIsxMouseDir(IsxMouseDir):
+    mouse_name: str
+    mouse_dir: Path
+
+    day0_dir: ISXDir
+    day1_dir: ISXDir
+    day2_dir: ISXDir
+    day3_dir: ISXDir
+    day4_dir: ISXDir
+
+    @property
+    def day_dirs(self) -> List[ISXDir]:
+        return [self.day0_dir, self.day1_dir, self.day2_dir, self.day3_dir, self.day4_dir]
+
+    @classmethod
+    def from_mouse_dir(cls, mouse_dir: Path):
+        day0_dir = ISXDir.from_session_dir(mouse_dir / "day0")
+        day1_dir = ISXDir.from_session_dir(mouse_dir / "day1")
+        day2_dir = ISXDir.from_session_dir(mouse_dir / "day2")
+        day3_dir = ISXDir.from_session_dir(mouse_dir / "day3")
+        day4_dir = ISXDir.from_session_dir(mouse_dir / "day4")
+
+
+        return cls(
+            mouse_name=mouse_dir.name,
+            mouse_dir=mouse_dir,
+            day0_dir=day0_dir,
+            day1_dir=day1_dir,
+            day2_dir=day2_dir,
+            day3_dir=day3_dir,
+            day4_dir=day4_dir,
+        )

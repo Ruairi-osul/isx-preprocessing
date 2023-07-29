@@ -1,4 +1,4 @@
-from isx_preprocessing.path_parcers.output import OutputRootParserAstrocyte
+from isx_preprocessing.path_parcers.output import OutputRootParserOFLRepeated
 from isx_preprocessing.dataset_create import (
     TraceCreater,
     PropsCreater,
@@ -8,9 +8,8 @@ from pathlib import Path
 from tqdm import tqdm
 from dataclasses import dataclass
 
-GOOD_MICE_NUMS = (5, 8, 9, 13, 15, 22, 27, 30, 31, 6, 7, 12, 18, 24, 25, 28, 32)
-SOURCE_DIR = Path(r"/Volumes/Pdata/astrocyte/export1")
-DEST_DIR = Path(r"/Volumes/Pdata/astrocyte/dataset_1")
+SOURCE_DIR = Path(r"F:\OFL\ofl-repeated")
+DEST_DIR = Path(r"F:\OFL\ofl-repeated dataset")
 ON_EXISTS = "overwrite"
 COMPRESSION = "snappy"
 
@@ -23,16 +22,24 @@ class SessionAttr:
 
 
 def main():
-    mouse_dirs = OutputRootParserAstrocyte.from_root_dir(
-        SOURCE_DIR, numbers=GOOD_MICE_NUMS
+    mouse_dirs = OutputRootParserOFLRepeated.from_root_dir(
+        SOURCE_DIR, 
     ).mouse_dirs
 
-    ret = SessionAttr(
-        session_name="ret", session_attr="ret_behavior_dir", sub_dir="03-ret"
+
+    day1 = SessionAttr(
+        session_name="day1", session_attr="day1_dir", sub_dir="01-day1"
     )
-    ext = SessionAttr(
-        session_name="ext", session_attr="ext_behavior_dir", sub_dir="04-ext"
+    day2 = SessionAttr(
+        session_name="day2", session_attr="day2_dir", sub_dir="02-day2"
     )
+    day3 = SessionAttr(
+        session_name="day3", session_attr="day3_dir", sub_dir="03-day3"
+    )
+    day4 = SessionAttr(
+        session_name="day4", session_attr="day4_dir", sub_dir="04-day4"
+    )
+    sessions = [day1, day2, day3, day4]
 
     trace_creator = TraceCreater(trace_fn="traces.parquet", compression=COMPRESSION)
     props_creator = PropsCreater(props_fn="cell_props.parquet", compression=COMPRESSION)
@@ -42,7 +49,7 @@ def main():
         source_cellset=SOURCE_DIR / "master_cellset.csv", output_dir=DEST_DIR
     )
 
-    for session_attr in tqdm((ret, ext)):
+    for session_attr in tqdm(sessions):
         trace_files = []
         props_files = []
         for mouse_dir in mouse_dirs:
