@@ -4,8 +4,7 @@ from pathlib import Path
 from tqdm import tqdm
 
 
-SOURCE_DIR = Path(r"D:\Shana ISX Reordered")
-DEST_DIR = Path(r"F:\OFL\ofl-repeated")
+DEST_DIR = Path(r"/Volumes/Pdata/OFL/ofl-repeated")
 ON_EXISTS = "overwrite"
 MASTER_CELLSET_FILE = DEST_DIR / "master_cellset.csv"
 

@@ -34,29 +34,39 @@ class IDUpdaterMouse(IDUpdater):
         self.on_exists = on_exists
 
     def update_traces(
-        self, longreg_file: Path, trace_file: Path, updated_trace_file: Path
+        self, longreg_file: Path, trace_file: Path, updated_trace_file: Path, session_name: str
     ) -> None:
         traces = pd.read_csv(trace_file)
         longreg = pd.read_csv(longreg_file)
+        longreg = longreg.query(f"session == '{session_name}'")
+        longreg = longreg[[self.session_cell_id, self.mouse_cell_id]].drop_duplicates()
 
-        traces = traces.merge(
-            longreg[[self.session_cell_id, self.mouse_cell_id]].drop_duplicates(),
+        traces = pd.merge(
+            traces,
+            longreg,
             on=self.session_cell_id,
+            how="inner"
         )
+
         traces = traces.drop(columns=[self.session_cell_id])
         self.if_exists(updated_trace_file)
         traces.to_csv(updated_trace_file, index=False)
 
     def update_props(
-        self, longreg_file: Path, props_file: Path, updated_props_file: Path
+        self, longreg_file: Path, props_file: Path, updated_props_file: Path, session_name: str
     ) -> None:
         props = pd.read_csv(props_file)
         longreg = pd.read_csv(longreg_file)
+        longreg = longreg.query(f"session == '{session_name}'")
+        longreg = longreg[[self.session_cell_id, self.mouse_cell_id]].drop_duplicates()
 
-        props = props.merge(
-            longreg[[self.session_cell_id, self.mouse_cell_id]].drop_duplicates(),
+        props = pd.merge(
+            props,
+            longreg,
             on=self.session_cell_id,
+            how="inner"
         )
+        
         props = props.drop(columns=[self.session_cell_id])
         self.if_exists(updated_props_file)
         props.to_csv(updated_props_file, index=False)

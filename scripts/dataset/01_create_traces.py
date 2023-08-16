@@ -8,8 +8,9 @@ from pathlib import Path
 from tqdm import tqdm
 from dataclasses import dataclass
 
-SOURCE_DIR = Path(r"F:\OFL\ofl-repeated")
-DEST_DIR = Path(r"F:\OFL\ofl-repeated dataset")
+SOURCE_DIR = Path(r"/Volumes/Pdata/OFL/ofl-repeated")
+DEST_DIR = Path(r"/Volumes/Pdata/OFL/ofl-repeated dataset")
+
 ON_EXISTS = "overwrite"
 COMPRESSION = "snappy"
 

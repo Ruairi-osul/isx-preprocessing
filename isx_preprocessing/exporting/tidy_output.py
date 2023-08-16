@@ -1,4 +1,3 @@
-import isx
 from typing import Optional, Sequence
 from pathlib import Path
 import pandas as pd
