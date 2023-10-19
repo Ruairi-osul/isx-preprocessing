@@ -54,6 +54,13 @@ class AstrocyteSet1IsxMouseDir(IsxMouseDir):
     long_ret_dir: ISXDir
     renew_dir: ISXDir
 
+    @staticmethod
+    def sort_lret_ren(session_dir1: Path, session_dir2: Path) -> Tuple[Path, Path]:
+        if "ren" in session_dir1.name.lower():
+            return session_dir2, session_dir1
+        else:
+            return session_dir1, session_dir2
+
     @classmethod
     def from_mouse_dir(cls, mouse_dir: Path):
         # filter sub_dirs to only include those that end in six digits
@@ -86,6 +93,7 @@ class AstrocyteSet1IsxMouseDir(IsxMouseDir):
             reverse=True,
         )
         ext_ret_dir = sub_dirs[7]
+        
         long_ret_dir = sub_dirs[8]
         renew_dir = sub_dirs[9]
 
@@ -119,6 +127,13 @@ class AstrocyteSet2IsxMouseDir(IsxMouseDir):
     ext_ret_dir: ISXDir
     long_ret_dir: ISXDir
     renew_dir: ISXDir
+
+    @staticmethod
+    def sort_lret_ren(session_dir1: Path, session_dir2: Path) -> Tuple[Path, Path]:
+        if "ren" in session_dir1.name.lower():
+            return session_dir2, session_dir1
+        else:
+            return session_dir1, session_dir2
 
     @classmethod
     def from_mouse_dir(cls, mouse_dir: Path):
@@ -159,8 +174,8 @@ class AstrocyteSet2IsxMouseDir(IsxMouseDir):
             reverse=True,
         )
         ext_ret_dir = sub_dirs[6]
-        long_ret_dir = sub_dirs[7]
-        renew_dir = sub_dirs[8]
+        long_ret_dir, renew_dir = cls.sort_lret_ren(sub_dirs[7], sub_dirs[8])
+
 
         return cls(
             mouse_name=mouse_dir.name,
