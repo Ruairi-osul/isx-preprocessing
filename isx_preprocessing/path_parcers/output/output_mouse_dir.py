@@ -2,7 +2,7 @@ from pathlib import Path
 from .output_session_dir import OutputDir
 from dataclasses import dataclass
 import datetime
-from typing import List
+from typing import List, Tuple
 
 
 @dataclass
@@ -74,6 +74,15 @@ class OutputMouseDirAstrocyte(OutputMouseDir):
     def is_hab_dir(session_dir: Path):
         return "hab" in session_dir.name
 
+    @staticmethod
+    def sort_lret_ren(
+        session_dir1: OutputDir, session_dir2: OutputDir
+    ) -> Tuple[OutputDir, OutputDir]:
+        if "ren" in session_dir1.session_dir.name.lower():
+            return session_dir2, session_dir1
+        else:
+            return session_dir1, session_dir2
+
     @classmethod
     def from_mouse_dir(cls, mouse_dir: Path):
         # filter sub_dirs to only include those that end in six digits
@@ -101,15 +110,14 @@ class OutputMouseDirAstrocyte(OutputMouseDir):
             reverse=True,
         )
         ext_ret_dir = sub_dirs[5]
-        long_ret_dir = sub_dirs[6]
-        renew_dir = sub_dirs[7]
+
+        long_ret_dir, renew_dir = cls.sort_lret_ren(sub_dirs[6], sub_dirs[7])
 
         long_reg_csv = mouse_dir / "long_reg.csv"
         long_reg_tidy_csv = mouse_dir / "long_reg_tidy.csv"
         long_reg_tidy_dataset_id_csv = mouse_dir / "long_reg_tidy_dataset_id.csv"
         long_reg_crop_csv = mouse_dir / "long_reg_crop.csv"
         long_reg_translation_csv = mouse_dir / "long_reg_translation.csv"
-
 
         return cls(
             mouse_name=mouse_dir.name,
@@ -130,7 +138,6 @@ class OutputMouseDirAstrocyte(OutputMouseDir):
         )
 
 
-
 @dataclass
 class OutputMouseDirOFLRepeated(OutputMouseDir):
     mouse_name: str
@@ -144,7 +151,13 @@ class OutputMouseDirOFLRepeated(OutputMouseDir):
 
     @property
     def day_dirs(self) -> List[OutputDir]:
-        return [self.day0_dir, self.day1_dir, self.day2_dir, self.day3_dir, self.day4_dir]
+        return [
+            self.day0_dir,
+            self.day1_dir,
+            self.day2_dir,
+            self.day3_dir,
+            self.day4_dir,
+        ]
 
     @classmethod
     def from_mouse_dir(cls, mouse_dir: Path):
@@ -162,7 +175,6 @@ class OutputMouseDirOFLRepeated(OutputMouseDir):
         long_reg_crop_csv = mouse_dir / "long_reg_crop.csv"
         long_reg_translation_csv = mouse_dir / "long_reg_translation.csv"
 
-
         return cls(
             mouse_name=mouse_dir.name,
             mouse_dir=mouse_dir,
@@ -177,7 +189,6 @@ class OutputMouseDirOFLRepeated(OutputMouseDir):
             long_reg_crop_csv=long_reg_crop_csv,
             long_reg_translation_csv=long_reg_translation_csv,
         )
-    
 
 
 @dataclass
@@ -193,7 +204,13 @@ class OutputMouseDirOFLFirst(OutputMouseDir):
 
     @property
     def day_dirs(self) -> List[OutputDir]:
-        return [self.day0_dir, self.day1_dir, self.day2_dir, self.day3_dir, self.day4_dir]
+        return [
+            self.day0_dir,
+            self.day1_dir,
+            self.day2_dir,
+            self.day3_dir,
+            self.day4_dir,
+        ]
 
     @classmethod
     def from_mouse_dir(cls, mouse_dir: Path):
@@ -211,7 +228,6 @@ class OutputMouseDirOFLFirst(OutputMouseDir):
         long_reg_crop_csv = mouse_dir / "long_reg_crop.csv"
         long_reg_translation_csv = mouse_dir / "long_reg_translation.csv"
 
-
         return cls(
             mouse_name=mouse_dir.name,
             mouse_dir=mouse_dir,
@@ -226,3 +242,28 @@ class OutputMouseDirOFLFirst(OutputMouseDir):
             long_reg_crop_csv=long_reg_crop_csv,
             long_reg_translation_csv=long_reg_translation_csv,
         )
+
+
+# def get_paths_on_relative_day(paths, relative_day=0):
+#     """
+#     Return the paths that occurred on a given day relative to the first path in the sequence.
+
+#     :param paths: List of pathlib.Path objects whose name attribute ends in a date of the format "%m%d%y".
+#     :param relative_day: The number of days relative to the first path's date. (e.g., -1 for one day before)
+#     :return: List of matched pathlib.Path objects.
+#     """
+#     if not paths:
+#         return []
+
+#     # Extract date from the first path
+#     first_path_date_str = paths[0].name[-6:]  # Assuming the last 6 characters have the date
+#     first_path_date = datetime.strptime(first_path_date_str, '%m%d%y').date()
+
+#     # Calculate the target date based on the relative_day
+#     target_date = first_path_date + timedelta(days=relative_day)
+#     target_date_str = target_date.strftime('%m%d%y')
+
+#     # Filter paths that match the target date
+#     matching_paths = [path for path in paths if path.name.endswith(target_date_str)]
+
+#     return matching_paths
