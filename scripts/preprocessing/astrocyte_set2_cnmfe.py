@@ -4,8 +4,8 @@ from typing import List, Iterable, Optional
 from pathlib import Path
 from tqdm import tqdm
 
-GOOD_MICE_NUMS = (5, 8, 9, 13, 15, 22, 27, 30, 31, 6, 7, 12, 18, 24, 25, 28, 32)
-ROOT_DIR = Path(r"E:\AS-Gq-GRIN")
+# GOOD_MICE_NUMS = (5, 8, 9, 13, 15, 22, 27, 30, 31, 6, 7, 12, 18, 24, 25, 28, 32)
+ROOT_DIR =  Path(r"D:\AS-Gq-GRIN")
 
 
 def find_mouse_dirs(
@@ -31,14 +31,14 @@ def find_mouse_dirs(
 
 
 def main():
-    mouse_dirs = find_mouse_dirs(ROOT_DIR, numbers=GOOD_MICE_NUMS)
+    mouse_dirs = find_mouse_dirs(ROOT_DIR)
     dispatcher = CNMFeDispatcher(
         on_exists="skip",
         cnmfe=ISXCNMFe(num_threads=10),
     )
     for mouse_dir in tqdm(mouse_dirs, desc="Mice"):
         for session_dir in tqdm(
-            [mouse_dir.ret_behavior_dir, mouse_dir.ext_behavior_dir],
+            mouse_dir.day_dirs,
             desc=f"{mouse_dir.mouse_name} sessions",
         ):
             dispatcher(isx_video=session_dir.motion_corrected)

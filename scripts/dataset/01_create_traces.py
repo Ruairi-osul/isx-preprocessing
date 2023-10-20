@@ -1,4 +1,4 @@
-from isx_preprocessing.path_parcers.output import OutputRootParserOFLRepeated
+from isx_preprocessing.path_parcers.output import OutputRootParserOFLFirst
 from isx_preprocessing.dataset_create import (
     TraceCreater,
     PropsCreater,
@@ -8,8 +8,8 @@ from pathlib import Path
 from tqdm import tqdm
 from dataclasses import dataclass
 
-SOURCE_DIR = Path(r"/Volumes/Pdata/OFL/ofl-repeated")
-DEST_DIR = Path(r"/Volumes/Pdata/OFL/ofl-repeated dataset")
+SOURCE_DIR = Path(r"F:\OFL\ofl-first")
+DEST_DIR = Path(r"F:\OFL\ofl-first-dataset\dataset")
 
 ON_EXISTS = "overwrite"
 COMPRESSION = "snappy"
@@ -23,7 +23,7 @@ class SessionAttr:
 
 
 def main():
-    mouse_dirs = OutputRootParserOFLRepeated.from_root_dir(
+    mouse_dirs = OutputRootParserOFLFirst.from_root_dir(
         SOURCE_DIR, 
     ).mouse_dirs
 

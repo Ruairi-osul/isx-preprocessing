@@ -54,6 +54,18 @@ class AstrocyteSet1IsxMouseDir(IsxMouseDir):
     long_ret_dir: ISXDir
     renew_dir: ISXDir
 
+    @property
+    def day_dirs(self) -> List[ISXDir]:
+        return [
+            self.hab_cs_dir,
+            self.cond_dir,
+            self.ret_behavior_dir,
+            self.ext_behavior_dir,
+            self.ext_ret_dir,
+            self.long_ret_dir,
+            self.renew_dir,
+        ]
+
     @classmethod
     def from_mouse_dir(cls, mouse_dir: Path):
         # filter sub_dirs to only include those that end in six digits
@@ -120,6 +132,18 @@ class AstrocyteSet2IsxMouseDir(IsxMouseDir):
     long_ret_dir: ISXDir
     renew_dir: ISXDir
 
+    @property
+    def day_dirs(self) -> List[ISXDir]:
+        return [
+            self.hab_dir,
+            self.cond_dir,
+            self.ret_behavior_dir,
+            self.ext_behavior_dir,
+            self.ext_ret_dir,
+            self.long_ret_dir,
+            self.renew_dir,
+        ]
+
     @classmethod
     def from_mouse_dir(cls, mouse_dir: Path):
         # filter sub_dirs to only include those that end in six digits
@@ -177,8 +201,6 @@ class AstrocyteSet2IsxMouseDir(IsxMouseDir):
         )
 
 
-
-
 @dataclass
 class OFLRepeatedIsxMouseDir(IsxMouseDir):
     mouse_name: str
@@ -192,7 +214,13 @@ class OFLRepeatedIsxMouseDir(IsxMouseDir):
 
     @property
     def day_dirs(self) -> List[ISXDir]:
-        return [self.day0_dir, self.day1_dir, self.day2_dir, self.day3_dir, self.day4_dir]
+        return [
+            self.day0_dir,
+            self.day1_dir,
+            self.day2_dir,
+            self.day3_dir,
+            self.day4_dir,
+        ]
 
     @classmethod
     def from_mouse_dir(cls, mouse_dir: Path):
@@ -201,7 +229,6 @@ class OFLRepeatedIsxMouseDir(IsxMouseDir):
         day2_dir = ISXDir.from_session_dir(mouse_dir / "day2")
         day3_dir = ISXDir.from_session_dir(mouse_dir / "day3")
         day4_dir = ISXDir.from_session_dir(mouse_dir / "day4")
-
 
         return cls(
             mouse_name=mouse_dir.name,
@@ -212,7 +239,7 @@ class OFLRepeatedIsxMouseDir(IsxMouseDir):
             day3_dir=day3_dir,
             day4_dir=day4_dir,
         )
-    
+
 
 @dataclass
 class OFLFirstIsxMouseDir(IsxMouseDir):
@@ -227,7 +254,13 @@ class OFLFirstIsxMouseDir(IsxMouseDir):
 
     @property
     def day_dirs(self) -> List[ISXDir]:
-        return [self.day0_dir, self.day1_dir, self.day2_dir, self.day3_dir, self.day4_dir]
+        return [
+            self.day0_dir,
+            self.day1_dir,
+            self.day2_dir,
+            self.day3_dir,
+            self.day4_dir,
+        ]
 
     @classmethod
     def from_mouse_dir(cls, mouse_dir: Path):
@@ -236,7 +269,6 @@ class OFLFirstIsxMouseDir(IsxMouseDir):
         day2_dir = ISXDir.from_session_dir(mouse_dir / "day2")
         day3_dir = ISXDir.from_session_dir(mouse_dir / "day3")
         day4_dir = ISXDir.from_session_dir(mouse_dir / "day4")
-
 
         return cls(
             mouse_name=mouse_dir.name,

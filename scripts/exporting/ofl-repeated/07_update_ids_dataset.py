@@ -1,17 +1,17 @@
-from isx_preprocessing.path_parcers.output import OutputRootParserOFLRepeated
+from isx_preprocessing.path_parcers.output import OutputRootParserOFLFirst
 from isx_preprocessing.exporting.update_ids import IDUpdaterDataset
 from pathlib import Path
 from tqdm import tqdm
 
 
-DEST_DIR = Path(r"/Volumes/Pdata/OFL/ofl-repeated")
+DEST_DIR = Path(r"F:\OFL\ofl-first")
 ON_EXISTS = "overwrite"
 MASTER_CELLSET_FILE = DEST_DIR / "master_cellset.csv"
 
 
 def main():
-    mouse_dirs = OutputRootParserOFLRepeated.from_root_dir(
-        DEST_DIR, 
+    mouse_dirs = OutputRootParserOFLFirst.from_root_dir(
+        DEST_DIR,
     ).mouse_dirs
 
     id_updater = IDUpdaterDataset(

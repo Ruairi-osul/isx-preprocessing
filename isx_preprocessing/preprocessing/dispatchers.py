@@ -45,6 +45,7 @@ class Dispatcher:
         if path.exists():
             if self.on_exists == "overwrite":
                 path.unlink()
+                return False
             elif self.on_exists == "raise":
                 raise FileExistsError(f"{path} already exists.")
             elif self.on_exists == "skip":

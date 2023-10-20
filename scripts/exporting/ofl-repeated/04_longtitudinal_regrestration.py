@@ -4,7 +4,7 @@ from isx_preprocessing.path_parcers.raw import (
 from isx_preprocessing.path_parcers.output import (
     OutputMouseDirOFLFirst, OutputRootParserOFLFirst
 )
-from isx_preprocessing.exporting import IsxLongtitudinalRegistration
+from isx_preprocessing.exporting.longreg import IsxLongtitudinalRegistration
 from typing import Optional, Sequence
 from pathlib import Path
 from tqdm import tqdm
