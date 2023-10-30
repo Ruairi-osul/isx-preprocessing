@@ -1,4 +1,4 @@
-from isx_preprocessing.path_parcers.output import OutputRootParserOFLFirst
+from isx_preprocessing.path_parcers.output import OutputRootParserAstrocyte
 from isx_preprocessing.dataset_create import (
     TraceCreater,
     PropsCreater,
@@ -8,10 +8,11 @@ from pathlib import Path
 from tqdm import tqdm
 from dataclasses import dataclass
 
-SOURCE_DIR = Path(r"F:\OFL\ofl-first")
-DEST_DIR = Path(r"F:\OFL\ofl-first-dataset\dataset")
+SOURCE_DIR = Path(r"F:\Astrocyte\Export")
 
+DEST_DIR = Path(r"F:\Astrocyte\dataset-01")
 ON_EXISTS = "overwrite"
+
 COMPRESSION = "snappy"
 
 
@@ -23,24 +24,27 @@ class SessionAttr:
 
 
 def main():
-    mouse_dirs = OutputRootParserOFLFirst.from_root_dir(
-        SOURCE_DIR, 
+    mouse_dirs = OutputRootParserAstrocyte.from_root_dir(
+        SOURCE_DIR,
     ).mouse_dirs
 
-
-    day1 = SessionAttr(
-        session_name="day1", session_attr="day1_dir", sub_dir="01-day1"
+    cond = SessionAttr(session_name="cond", session_attr="cond_dir", sub_dir="01-cond")
+    ret = SessionAttr(
+        session_name="ret", session_attr="ret_behavior_dir", sub_dir="02-ret"
     )
-    day2 = SessionAttr(
-        session_name="day2", session_attr="day2_dir", sub_dir="02-day2"
+    ext = SessionAttr(
+        session_name="ext", session_attr="ext_behavior_dir", sub_dir="03-ext"
     )
-    day3 = SessionAttr(
-        session_name="day3", session_attr="day3_dir", sub_dir="03-day3"
+    diff_ret = SessionAttr(
+        session_name="diff-ret", session_attr="ext_ret_dir", sub_dir="04-diff-ret"
     )
-    day4 = SessionAttr(
-        session_name="day4", session_attr="day4_dir", sub_dir="04-day4"
+    late_ret = SessionAttr(
+        session_name="late-ret", session_attr="long_ret_dir", sub_dir="05-late-ret"
     )
-    sessions = [day1, day2, day3, day4]
+    renewal = SessionAttr(
+        session_name="renewal", session_attr="renew_dir", sub_dir="05-renewal"
+    )
+    sessions = [cond, ret, ext, diff_ret, late_ret, renewal]
 
     trace_creator = TraceCreater(trace_fn="traces.parquet", compression=COMPRESSION)
     props_creator = PropsCreater(props_fn="cell_props.parquet", compression=COMPRESSION)
@@ -55,8 +59,11 @@ def main():
         props_files = []
         for mouse_dir in mouse_dirs:
             session_dir = getattr(mouse_dir, session_attr.session_attr)
-            trace_files.append(session_dir.traces_tidy_mouse_dataset_id)
-            props_files.append(session_dir.props_tidy_mouse_dataset_id)
+            if session_dir.traces_tidy_mouse_id.exists():
+                trace_files.append(session_dir.traces_tidy_mouse_dataset_id)
+            if session_dir.props_tidy_mouse_id.exists():
+                props_files.append(session_dir.props_tidy_mouse_dataset_id)
+
         trace_creator(
             trace_files=trace_files, output_dir=DEST_DIR / session_attr.sub_dir
         )

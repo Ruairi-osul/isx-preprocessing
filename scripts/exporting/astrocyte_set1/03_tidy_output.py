@@ -1,28 +1,32 @@
-from isx_preprocessing.path_parcers.raw import (
-    AstrocyteSet1IsxMouseDir, IsxRootParserAstrocyteSet1
-)
 from isx_preprocessing.path_parcers.output import (
-    OutputMouseDirAstrocyte, OutputRootParserAstrocyte
+    OutputRootParserAstrocyte,
 )
-from isx_preprocessing.exporting import TraceTidier, PropsTidier
+from isx_preprocessing.exporting.tidy_output import TraceTidier, PropsTidier
 from pathlib import Path
 from tqdm import tqdm
 
-SOURCE_DIR = Path(r"F:\Raw OFL")
-DEST_DIR = Path(r"F:\OFL\ofl-first")
-ON_EXISTS = "skip"
+DEST_DIR = Path(r"F:\Astrocyte\Export")
+ON_EXISTS = "overwrite"
 
 
 def main():
     mouse_dirs = OutputRootParserAstrocyte.from_root_dir(
-        DEST_DIR, 
+        DEST_DIR,
     ).mouse_dirs
 
     trace_tidyer = TraceTidier(on_exists=ON_EXISTS)
     props_tidyer = PropsTidier(on_exists=ON_EXISTS)
 
     for mouse_dir in tqdm(mouse_dirs):
-        sessions = mouse_dir.day_dirs[1:]
+        sessions = [
+            mouse_dir.cond_dir,
+            mouse_dir.ret_behavior_dir,
+            mouse_dir.ext_behavior_dir,
+            mouse_dir.ext_ret_dir,
+            mouse_dir.long_ret_dir,
+            mouse_dir.renew_dir,
+        ]
+
         for session_dir in sessions:
             if session_dir.traces.exists():
                 trace_tidyer(

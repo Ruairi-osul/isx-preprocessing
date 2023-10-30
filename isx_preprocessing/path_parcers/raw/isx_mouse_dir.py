@@ -66,9 +66,18 @@ class AstrocyteSet1IsxMouseDir(IsxMouseDir):
             self.renew_dir,
         ]
 
+    # @staticmethod
+    # def sort_lret_ren(session_dir1: Path, session_dir2: Path) -> Tuple[Path, Path]:
+    #     if "ren" in session_dir1.name.lower():
+    #         return session_dir2, session_dir1
+    #     else:
+    #         return session_dir1, session_dir2
+
     @staticmethod
-    def sort_lret_ren(session_dir1: Path, session_dir2: Path) -> Tuple[Path, Path]:
-        if "ren" in session_dir1.name.lower():
+    def sort_lret_ren(
+        session_dir1: ISXDir, session_dir2: ISXDir
+    ) -> Tuple[ISXDir, ISXDir]:
+        if "ren" in session_dir1.session_dir.name.lower():
             return session_dir2, session_dir1
         else:
             return session_dir1, session_dir2
@@ -106,8 +115,7 @@ class AstrocyteSet1IsxMouseDir(IsxMouseDir):
         )
         ext_ret_dir = sub_dirs[7]
 
-        long_ret_dir = sub_dirs[8]
-        renew_dir = sub_dirs[9]
+        long_ret_dir, renew_dir = cls.sort_lret_ren(sub_dirs[7], sub_dirs[8])
 
         return cls(
             mouse_name=mouse_dir.name,

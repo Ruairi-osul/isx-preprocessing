@@ -1,8 +1,8 @@
-from isx_preprocessing.exporting import DirectoryCopier
+from isx_preprocessing.exporting.dir_copy import DirectoryCopier
 from pathlib import Path
 
-SOURCE_DIR = Path(r"F:\Raw OFL")
-DEST_DIR = Path(r"F:\OFL\ofl-first")
+SOURCE_DIR = Path(r"G:\AS-Gq-GRIN")
+DEST_DIR = Path(r"F:\Astrocyte\Export")
 
 
 def main():

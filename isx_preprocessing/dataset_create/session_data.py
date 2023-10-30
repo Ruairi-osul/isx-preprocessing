@@ -34,6 +34,8 @@ class TraceCreater(Creater):
 
     def pivot_traces(self, df: pd.DataFrame) -> pd.DataFrame:
         df["cell_id"] = df["cell_id"].astype(str)
+        df["value"] = df["value"].astype(float)
+
         df = df.pivot_table(
             index="time", columns="cell_id", values="value", aggfunc=self.pivot_agg
         )

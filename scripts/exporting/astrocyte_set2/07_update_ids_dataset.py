@@ -4,14 +4,14 @@ from pathlib import Path
 from tqdm import tqdm
 
 
-DEST_DIR = Path(r"/Volumes/Pdata/OFL/ofl-repeated")
+DEST_DIR = Path(r"F:\Astrocyte\Export")
 ON_EXISTS = "overwrite"
 MASTER_CELLSET_FILE = DEST_DIR / "master_cellset.csv"
 
 
 def main():
     mouse_dirs = OutputRootParserAstrocyte.from_root_dir(
-        DEST_DIR, 
+        DEST_DIR,
     ).mouse_dirs
 
     id_updater = IDUpdaterDataset(
@@ -36,19 +36,26 @@ def main():
             mouse_dir.long_ret_dir,
             mouse_dir.renew_dir,
         ]
+
         for session_dir in sessions:
-            id_updater.update_traces(
-                master_cellset=master_cellset,
-                mouse_name=mouse_name,
-                trace_file=session_dir.traces_tidy_mouse_id,
-                updated_trace_file=session_dir.traces_tidy_mouse_dataset_id,
-            )
-            id_updater.update_props(
-                master_cellset=master_cellset,
-                mouse_name=mouse_name,
-                props_file=session_dir.props_tidy_mouse_id,
-                updated_props_file=session_dir.props_tidy_mouse_dataset_id,
-            )
+            if session_dir.traces_tidy_mouse_id.exists():
+                id_updater.update_traces(
+                    master_cellset=master_cellset,
+                    mouse_name=mouse_name,
+                    trace_file=session_dir.traces_tidy_mouse_id,
+                    updated_trace_file=session_dir.traces_tidy_mouse_dataset_id,
+                )
+            else:
+                print(f"Missing {session_dir.traces_tidy_mouse_id}")
+            if session_dir.props_tidy_mouse_id.exists():
+                id_updater.update_props(
+                    master_cellset=master_cellset,
+                    mouse_name=mouse_name,
+                    props_file=session_dir.props_tidy_mouse_id,
+                    updated_props_file=session_dir.props_tidy_mouse_dataset_id,
+                )
+            else:
+                print(f"Missing {session_dir.props_tidy_mouse_id}")
 
 
 if __name__ == "__main__":
