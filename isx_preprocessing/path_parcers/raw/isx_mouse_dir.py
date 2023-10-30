@@ -130,7 +130,8 @@ class AstrocyteSet2IsxMouseDir(IsxMouseDir):
     mouse_name: str
     mouse_dir: Path
 
-    hab_dir: ISXDir
+    hab_cage_dir: ISXDir
+    hab_cs_dir: ISXDir
     cond_dir: ISXDir
     ret_injection_dir: ISXDir
     ret_behavior_dir: ISXDir
@@ -160,6 +161,14 @@ class AstrocyteSet2IsxMouseDir(IsxMouseDir):
             return session_dir2, session_dir1
         else:
             return session_dir1, session_dir2
+    
+    
+    @staticmethod
+    def sort_hab_cage_tone(session_dir1: ISXDir, session_dir2: ISXDir) -> Tuple[ISXDir, ISXDir]:
+        if "tone" not in session_dir1.session_dir.name.lower():
+            return session_dir1, session_dir2
+        else:
+            return session_dir2, session_dir2
 
     @classmethod
     def from_mouse_dir(cls, mouse_dir: Path):
@@ -170,7 +179,7 @@ class AstrocyteSet2IsxMouseDir(IsxMouseDir):
             if d.is_dir() and d.name[-6:].isdigit()
         ]
 
-        if len(sub_dirs) != 9:
+        if len(sub_dirs) != 10:
             print(len(sub_dirs))
             sub_dirs = sorted(
                 sub_dirs,
@@ -187,25 +196,26 @@ class AstrocyteSet2IsxMouseDir(IsxMouseDir):
             key=lambda d: datetime.datetime.strptime(d.session_dir.name[-6:], "%m%d%y"),
         )
 
-        hab_dir = sub_dirs[0]
-        cond_dir = sub_dirs[1]
+        hab_cage_dir, hab_cs_dir = cls.sort_hab_cage_tone(sub_dirs[0], sub_dirs[1])
+        cond_dir = sub_dirs[2]
         ret_behavior_dir, ret_injection_dir = sorted(
-            (sub_dirs[2], sub_dirs[3]),
+            (sub_dirs[3], sub_dirs[4]),
             key=lambda x: len(x.session_dir.name),
             reverse=True,
         )
         ext_behavior_dir, ext_injection_dir = sorted(
-            (sub_dirs[4], sub_dirs[5]),
+            (sub_dirs[5], sub_dirs[6]),
             key=lambda x: len(x.session_dir.name),
             reverse=True,
         )
-        ext_ret_dir = sub_dirs[6]
-        long_ret_dir, renew_dir = cls.sort_lret_ren(sub_dirs[7], sub_dirs[8])
+        ext_ret_dir = sub_dirs[7]
+        long_ret_dir, renew_dir = cls.sort_lret_ren(sub_dirs[8], sub_dirs[9])
 
         return cls(
             mouse_name=mouse_dir.name,
             mouse_dir=mouse_dir,
-            hab_dir=hab_dir,
+            hab_cage_dir=hab_cage_dir,
+            hab_cs_dir=hab_cs_dir,
             cond_dir=cond_dir,
             ret_behavior_dir=ret_behavior_dir,
             ret_injection_dir=ret_injection_dir,
